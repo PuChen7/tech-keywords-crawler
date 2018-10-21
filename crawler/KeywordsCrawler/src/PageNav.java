@@ -7,7 +7,7 @@ import org.jsoup.select.Elements;
 public class PageNav implements Runnable{
 	private int pageNum;
 	private String url;
-	
+		
 	// constructor
 	public PageNav(String url, int pageNum) {
 		this.pageNum = pageNum;
@@ -16,7 +16,7 @@ public class PageNav implements Runnable{
 
 	@Override
 	public void run() {
-		System.out.println("This is " + this.pageNum + "\n"+this.url+"\n");
+		//System.out.println("This is " + this.pageNum + "\n"+this.url+"\n");
 		
 		Document document = null;
 		try {
@@ -32,16 +32,18 @@ public class PageNav implements Runnable{
 		Elements job_id_selector = null;
 		
 		try {
-			// select [row result]
-//			job_id_selector = document.select("#resultsCol > div.row.result");
-			job_id_selector = document.select("#resultsCol > div.row.result > div > span.company");
+			/* Company name: #resultsCol > div.row.result > div > span.company (.text())
+			 * Id: #resultsCol > div.row.result (attr(id))
+			 * */
+			//job_id_selector = document.select("#resultsCol > div.row.result > div > span.company");
+			job_id_selector = document.select("#resultsCol > div.row.result");
 		}catch(Exception e) {
-			System.out.println("wrong selector");
+			e.printStackTrace();
 		}
 		
 		for (int i = 0; i < job_id_selector.size(); i++) {
 			//System.out.println(job_id_selector.get(i));
-			System.out.println(job_id_selector.get(i).text());
+			System.out.println(job_id_selector.get(i).id());
 		}
 		
 	}
