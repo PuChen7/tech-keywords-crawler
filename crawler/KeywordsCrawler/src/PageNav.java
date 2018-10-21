@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,8 +18,7 @@ public class PageNav implements Runnable{
 
 	@Override
 	public void run() {
-		//System.out.println("This is " + this.pageNum + "\n"+this.url+"\n");
-		
+		ExecutorService fixedExecutorService = Executors.newFixedThreadPool(10);
 		Document document = null;
 		try {
 			// get connection to url
@@ -26,7 +27,7 @@ public class PageNav implements Runnable{
 			e.printStackTrace();
 		}
 		
-		//System.out.println(document);
+		//System.out.println(document + "\n\n\n");
 		
 		// holding the selected elements
 		Elements job_id_selector = null;
@@ -42,9 +43,18 @@ public class PageNav implements Runnable{
 		}
 		
 		for (int i = 0; i < job_id_selector.size(); i++) {
-			//System.out.println(job_id_selector.get(i));
-			System.out.println(job_id_selector.get(i).id());
+			String id = jobIdTrimmer(job_id_selector.get(i).id());
+			String job_url = "https://www.indeed.com/rpc/jobdescs?jks=" + id;
+			
+			fixedExecutorService.execute(new SingleJobCrawler(job_url));
 		}
 		
+	}
+	
+	private String jobIdTrimmer(String id) {
+		int score_index = id.indexOf('_');
+		id = id.substring(score_index+1);
+		
+		return id;
 	}
 }
