@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -9,11 +10,13 @@ import org.jsoup.select.Elements;
 public class PageNav implements Runnable{
 	private int pageNum;
 	private String url;
+	public ConcurrentHashMap<String, Integer> map;
 		
 	// constructor
-	public PageNav(String url, int pageNum) {
+	public PageNav(String url, int pageNum, ConcurrentHashMap<String, Integer> map) {
 		this.pageNum = pageNum;
 		this.url = url;
+		this.map = map;
 	}
 
 	@Override
@@ -46,7 +49,7 @@ public class PageNav implements Runnable{
 			String id = jobIdTrimmer(job_id_selector.get(i).id());
 			String job_url = "https://www.indeed.com/rpc/jobdescs?jks=" + id;
 			
-			fixedExecutorService.execute(new SingleJobCrawler(job_url));
+			fixedExecutorService.execute(new SingleJobCrawler(job_url, this.map));
 		}
 		
 	}
