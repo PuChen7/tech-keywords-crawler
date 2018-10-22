@@ -1,25 +1,43 @@
 
-import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
 /*
  * 
  */
 
-public class Crawler implements Runnable{
+public class Crawler {
 	
 	
 	public static void main(String args[]) throws InterruptedException{
+		// define searching criteria
 		ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<String, Integer>();
 		map.put("java", 0);
-		map.put("c", 0);
+		map.put(" c ", 0);
+		map.put("javascript", 0);
+		map.put("node", 0);
+		map.put("c++", 0);
+		map.put("python", 0);
+		map.put("html", 0);
+		map.put("css", 0);
+		map.put("angular", 0);
+		map.put("bootstrap", 0);
+		map.put("react", 0);
+		map.put("php", 0);
+		map.put("vue", 0);
+		map.put("object-oriented", 0);
+		map.put("spring", 0);
+		map.put("mvc", 0);
+		map.put("mysql", 0);
+		map.put("sql", 0);
+		map.put("tcp/ip", 0);
+		map.put("c#", 0);
+		map.put("ruby", 0);
+		map.put(".net", 0);
+		map.put("rest", 0);
+		
 		
 		ExecutorService fixedExecutorService = Executors.newFixedThreadPool(10);;
 		int pageCount = 0;
@@ -40,11 +58,5 @@ public class Crawler implements Runnable{
 		while(!fixedExecutorService.awaitTermination(1, TimeUnit.MINUTES));
 		
 		System.out.println(map);
-	}
-
-	@Override
-	public void run() {
-		
-		
 	}
 }

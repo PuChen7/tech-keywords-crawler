@@ -49,7 +49,7 @@ public class PageNav implements Runnable{
 			String id = jobIdTrimmer(job_id_selector.get(i).id());
 			String job_url = "https://www.indeed.com/rpc/jobdescs?jks=" + id;
 			
-			fixedExecutorService.execute(new SingleJobCrawler(job_url, this.map));
+			fixedExecutorService.execute(new SingleJobCrawler(job_url, this.map, id));
 		}
 		
 	}

@@ -1,10 +1,8 @@
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+import com.google.gson.*;
 
 /*
  * 
@@ -13,10 +11,12 @@ import org.jsoup.select.Elements;
 public class SingleJobCrawler implements Runnable{
 	private String url;
 	public ConcurrentHashMap<String, Integer> map;
+	private String id;
 	
-	public SingleJobCrawler(String url, ConcurrentHashMap<String, Integer> map) {
+	public SingleJobCrawler(String url, ConcurrentHashMap<String, Integer> map, String id) {
 		this.url = url;
 		this.map = map;
+		this.id = id;
 	}
 
 	@Override
@@ -29,10 +29,21 @@ public class SingleJobCrawler implements Runnable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+				
+		// convert json string to json
+		JsonObject jobj = new Gson().fromJson(json, JsonObject.class);
 		
-		if (json.contains("java")) {
-			map.replace("java", map.get("java")+1);
+		// all text in this job post
+		String text = Jsoup.parse(jobj.get(this.id).toString()).text();
+		
+		searchAndUpdate(text, this.map);
+	}
+	
+	private void searchAndUpdate(String text, ConcurrentHashMap<String, Integer> map) {
+		for (String key : map.keySet()) {
+			if (text.toLowerCase().contains(key)) {
+				map.put(key, map.get(key)+1);
+			}
 		}
-		
 	}
 }
