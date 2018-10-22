@@ -9,8 +9,6 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class Crawler {
-	
-	
 	public static void main(String args[]) throws InterruptedException{
 		// define searching criteria
 		ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<String, Integer>();
